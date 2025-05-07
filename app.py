@@ -197,7 +197,7 @@ print(f"Precision: {precision * 100:.2f}%")
 print(f"Recall:    {recall * 100:.2f}%")
 '''
 
-heart_disease = '''
+heart_diseases = '''
 print("22EC139 SANJAY exp_11\n")
 from pgmpy.models import DiscreteBayesianNetwork
 from pgmpy.factors.discrete import TabularCPD
@@ -235,6 +235,7 @@ nx.draw(
 )
 plt.title("Bayesian Network - Heart Disease Diagnosis")
 plt.show()
+
 '''
 
 knn_code = '''
@@ -270,7 +271,7 @@ st.title("ML Practical")
 selected_experiment = st.sidebar.selectbox(
     "Select an Experiment", 
     ["BFS_code", "A_Star", "Alpha_Beta", 
-     "ID_3", "ANN_Code", "Naiv_accu","acccu_press","heart_disease ","knn_code"]
+     "ID_3", "ANN_Code", "Naiv_accu","acccu_press","heart_diseases ","knn_code"]
 )
 
 # Display corresponding code
@@ -295,9 +296,9 @@ elif selected_experiment == "Naiv_accu":
 elif selected_experiment == "acccu_press":
     st.header("acccu_press")
     display_code(acccu_press)
-elif selected_experiment == "heart_disease":
-    st.header("heart_disease")
-    display_code(heart_disease)
+elif selected_experiment == "heart_diseases":
+    st.header("heart_diseases")
+    display_code(heart_diseases)
 elif selected_experiment == "knn_code":
     st.header("knn_code")
     display_code(knn_code)
