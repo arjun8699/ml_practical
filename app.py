@@ -197,6 +197,72 @@ print(f"Precision: {precision * 100:.2f}%")
 print(f"Recall:    {recall * 100:.2f}%")
 '''
 
+heart_disease = '''
+print("22EC139 SANJAY exp_11\n")
+from pgmpy.models import DiscreteBayesianNetwork
+from pgmpy.factors.discrete import TabularCPD
+from pgmpy.inference import VariableElimination
+import matplotlib.pyplot as plt
+import networkx as nx
+model = DiscreteBayesianNetwork([
+    ('Age', 'HeartDisease'),
+    ('Exercise', 'HeartDisease'),
+    ('Cholesterol', 'HeartDisease')
+])
+cpd_age = TabularCPD(variable='Age', variable_card=2, values=[[0.6], [0.4]])  # 0: Young, 1: Old
+cpd_exercise = TabularCPD(variable='Exercise', variable_card=2, values=[[0.7], [0.3]])  # 0: Yes, 1: No
+cpd_chol = TabularCPD(variable='Cholesterol', variable_card=2, values=[[0.8], [0.2]])  # 0: Normal, 1: High
+cpd_heart = TabularCPD(
+    variable='HeartDisease', variable_card=2,
+    values=[
+        [0.9, 0.8, 0.7, 0.6, 0.7, 0.5, 0.4, 0.3],  # No Disease
+        [0.1, 0.2, 0.3, 0.4, 0.3, 0.5, 0.6, 0.7]   # Disease
+    ],
+    evidence=['Age', 'Exercise', 'Cholesterol'],
+    evidence_card=[2, 2, 2]
+)
+model.add_cpds(cpd_age, cpd_exercise, cpd_chol, cpd_heart)
+infer = VariableElimination(model)
+result = infer.query(variables=['HeartDisease'], evidence={'Age': 1, 'Exercise': 1, 'Cholesterol': 1})
+print("=== Bayesian Network Inference Result ===")
+print(result)
+plt.figure(figsize=(6, 4))
+G = nx.DiGraph()
+G.add_edges_from(model.edges())
+nx.draw(
+    G, with_labels=True, node_size=2000, node_color="lightblue",
+    font_size=12, font_weight="bold", arrows=True, arrowsize=20
+)
+plt.title("Bayesian Network - Heart Disease Diagnosis")
+plt.show()
+'''
+
+knn_code = '''
+print("22EC139 SANJAY exp_12\n")
+from sklearn.datasets import load_iris
+from sklearn.cluster import KMeans
+from sklearn.mixture import GaussianMixture
+from sklearn.metrics import silhouette_score
+import pandas as pd
+data = load_iris()
+X = data.data  # Only features
+kmeans = KMeans(n_clusters=3, random_state=22)
+kmeans_labels = kmeans.fit_predict(X)
+kmeans_score = silhouette_score(X, kmeans_labels)
+em = GaussianMixture(n_components=3, random_state=22)
+em_labels = em.fit_predict(X)
+em_score = silhouette_score(X, em_labels)
+print("=== Clustering Comparison (Roll No: 22EC304) ===")
+print(f"K-Means Silhouette Score: {kmeans_score:.4f}")
+print(f"EM (GMM) Silhouette Score: {em_score:.4f}")
+if kmeans_score > em_score:
+    print("Result: K-Means performed better based on silhouette score.")
+elif em_score > kmeans_score:
+    print("Result: EM (Gaussian Mixture) performed better based on silhouette score.")
+else:
+    print("Result: Both algorithms performed equally.")
+'''
+
 # Streamlit App Layout
 st.title("ML Practical")
 
@@ -204,7 +270,7 @@ st.title("ML Practical")
 selected_experiment = st.sidebar.selectbox(
     "Select an Experiment", 
     ["BFS_code", "A_Star", "Alpha_Beta", 
-     "ID_3", "ANN_Code", "Naiv_accu","acccu_press"]
+     "ID_3", "ANN_Code", "Naiv_accu","acccu_press","heart_disease ","knn_code"]
 )
 
 # Display corresponding code
@@ -229,3 +295,9 @@ elif selected_experiment == "Naiv_accu":
 elif selected_experiment == "acccu_press":
     st.header("acccu_press")
     display_code(acccu_press)
+elif selected_experiment == "heart_disease":
+    st.header("heart_disease")
+    display_code(heart_disease)
+elif selected_experiment == "knn_code":
+    st.header("knn_code")
+    display_code(knn_code)
